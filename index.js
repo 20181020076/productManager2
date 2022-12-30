@@ -23,18 +23,19 @@ class ProductManager{
         }
     }
     getProducts(){
+        console.log(this.products);
         return this.products;
     }
     addProduct(product){
         if(this.products.find((item)=>{item.code === product.code})){
             return console.log("this code is already use, use other");
         }else if(
-            !!!product.title ||
-            !!!product.price ||
-            !!!product.code ||
-            !!!product.description ||
-            !!!product.thumnail ||
-            !!!product.stock
+            !!product.title ||
+            !!product.price ||
+            !!product.code ||
+            !!product.description ||
+            !!product.thumnail ||
+            !!product.stock
         ){
             return console.log("Some property is null, please check again");
         }else{
@@ -81,3 +82,14 @@ class ProductManager{
     }
 
 }
+const pm = new ProductManager("product.json");
+let producto = {
+    title:"camiseta pinguino",
+    description:"camiseta oversize estampado pinguino",
+    price:45000,
+    thumbnail: "camiseta-pinguino.jpg",
+    code:"1597",
+    stock: 13
+}
+pm.getProductsById(1);
+pm.getProducts();
