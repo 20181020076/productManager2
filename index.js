@@ -34,7 +34,7 @@ class ProductManager{
             !!!product.price ||
             !!!product.code ||
             !!!product.description ||
-            !!!product.thumnail ||
+            !!!product.thumbnail ||
             !!!product.stock
         ){
             return console.log("Some property is null, please check again");
@@ -92,4 +92,5 @@ let producto = {
     stock: 13
 }
 pm.getProductsById(1);
+pm.addProduct(producto);
 pm.getProducts();
