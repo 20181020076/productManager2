@@ -30,12 +30,12 @@ class ProductManager{
         if(this.products.find((item)=>{item.code === product.code})){
             return console.log("this code is already use, use other");
         }else if(
-            !!product.title ||
-            !!product.price ||
-            !!product.code ||
-            !!product.description ||
-            !!product.thumnail ||
-            !!product.stock
+            !!!product.title ||
+            !!!product.price ||
+            !!!product.code ||
+            !!!product.description ||
+            !!!product.thumnail ||
+            !!!product.stock
         ){
             return console.log("Some property is null, please check again");
         }else{
