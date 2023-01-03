@@ -1,4 +1,7 @@
 const fs = require('fs');
+const express = require('express');
+const { response } = require('express');
+
 class ProductManager{
     constructor(path){
         this.path = path;
@@ -10,7 +13,7 @@ class ProductManager{
     };
     writeData(data){
         let dataString = JSON.stringify(data);
-        fs.writeFileSync(`./${this.path}`,dataString);
+        fs.appendFileSync(`./${this.path}`,dataString);
         return dataString;
     }
     idGenerator(){
@@ -23,12 +26,11 @@ class ProductManager{
         }
     }
     getProducts(){
-        console.log(this.products);
         return this.products;
     }
     addProduct(product){
         if(this.products.find((item)=>{item.code === product.code})){
-            return console.log("this code is already use, use other");
+            console.log("this code is already use, use other");
         }else if(
             !!!product.title ||
             !!!product.price ||
@@ -37,12 +39,11 @@ class ProductManager{
             !!!product.thumbnail ||
             !!!product.stock
         ){
-            return console.log("Some property is null, please check again");
+            console.log("Some property is null, please check again");
         }else{
-            let data = this.readFile();
             product.id = this.idGenerator();
             this.products.push(product);
-            this.writeData(data)
+            this.writeData(this.products);
         }
     }
     getProductsById(id){
@@ -82,15 +83,27 @@ class ProductManager{
     }
 
 }
-const pm = new ProductManager("product.json");
-let producto = {
-    title:"camiseta pinguino",
-    description:"camiseta oversize estampado pinguino",
-    price:45000,
-    thumbnail: "camiseta-pinguino.jpg",
-    code:"1597",
-    stock: 13
-}
-pm.getProductsById(1);
-pm.addProduct(producto);
-pm.getProducts();
+
+
+const app = express();
+app.get('/',(res,req)=>{
+    const pm = new ProductManager("product.json");
+    req.send('home');
+});
+app.get('/products',(req,res)=>{
+    const pm = new ProductManager("product.json");
+    const products = pm.getProducts();
+    console.log(products);
+    res.send('products')
+})
+app.get('/products/:limit',(req,res)=>{
+    const pm = new ProductManager("product.json");
+    const products = pm.getProducts();
+    console.log(products[req.params.limit]);
+    res.send('products '+ req.params.limit);
+})
+
+app.listen(3000);
+
+
+
