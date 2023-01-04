@@ -111,12 +111,11 @@ app.get('/products',(req,res)=>{
     
     
 })
-// app.get('/products/:id',(req,res)=>{
-//     const pm = new ProductManager("product.json");
-//     const products = pm.getProducts();
-//     console.log(products[req.params.limit]);
-//     res.send('products '+ req.params.limit);
-// })
+app.get('/products/:id',(req,res)=>{
+    const pm = new ProductManager("product.json");
+    const products = pm.getProducts();
+    res.send(products[req.params.id-1]);
+})
 
 app.listen(3000);
 
