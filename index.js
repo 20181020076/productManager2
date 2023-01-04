@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const { response } = require('express');
+const { stringify } = require('querystring');
 
 class ProductManager{
     constructor(path){
@@ -93,15 +94,29 @@ app.get('/',(res,req)=>{
 app.get('/products',(req,res)=>{
     const pm = new ProductManager("product.json");
     const products = pm.getProducts();
-    console.log(products);
-    res.send('products')
+    //console.log(products);
+    if(req.query.limit){
+        const productsLimited = products.slice(0,req.query.limit);
+        res.send(JSON.stringify(productsLimited));
+    }else{
+        const text = `
+            <div>
+                hola
+            </div>
+        `;
+        res.send(JSON.stringify(products));
+        
+        
+    }
+    
+    
 })
-app.get('/products/:limit',(req,res)=>{
-    const pm = new ProductManager("product.json");
-    const products = pm.getProducts();
-    console.log(products[req.params.limit]);
-    res.send('products '+ req.params.limit);
-})
+// app.get('/products/:id',(req,res)=>{
+//     const pm = new ProductManager("product.json");
+//     const products = pm.getProducts();
+//     console.log(products[req.params.limit]);
+//     res.send('products '+ req.params.limit);
+// })
 
 app.listen(3000);
 
