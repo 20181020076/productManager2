@@ -1,6 +1,6 @@
 const fs = require('fs');
 const express = require('express');
-const { response } = require('express');
+const { response, urlencoded } = require('express');
 const { stringify } = require('querystring');
 
 class ProductManager{
@@ -48,14 +48,18 @@ class ProductManager{
         }
     }
     getProductsById(id){
-        let data = this.readFile();
-        if(data.find(product => product.id===id)){
-            let productFinale = data.find(product => product.id===id)
-            console.log(productFinale);
+        let data = this.products;
+        let productToGet = data.find(product => product.id == id);
+        console.log(typeof id)
+        console.log(productToGet);
+        if(productToGet){
+            console.log("true")
+            // let productFinale = data.find(product => product.id===id)
+            // console.log(productFinale);
             return productFinale;
-        }else{
-            console.log("Product doesnt found")
         }
+        console.log("Product doesn't found")
+        
         
     }
     updateProduct(id, product){
@@ -87,27 +91,24 @@ class ProductManager{
 
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
+app.use('/api/products', require('./routes/products'));
+app.use('/api/carts', require('./routes/carts'));
+
 app.get('/',(res,req)=>{
     const pm = new ProductManager("product.json");
-    req.send('home');
+    req.send('Home');
 });
-app.get('/products',(req,res)=>{
+app.get('/:pid',(res,req)=>{
     const pm = new ProductManager("product.json");
-    const products = pm.getProducts();
-    //console.log(products);
-    if(req.query.limit){
-        const productsLimited = products.slice(0,req.query.limit);
-        res.send(JSON.stringify(productsLimited));
-    }else{
-        const text = `
-            <div>
-                hola
-            </div>
-        `;
-        res.send(JSON.stringify(products));
-        
-        
-    }
+    req.send(pm.getProductsById(+res.params.pid));
+});
+
+app.get('/products',(req,res)=>{
+    
     
     
 })
@@ -117,7 +118,10 @@ app.get('/products/:id',(req,res)=>{
     res.send(products[req.params.id-1]);
 })
 
-app.listen(3000);
+const PORT = 8080;
+app.listen(PORT,()=>{
+    console.log(`servidor escuchando en el puerto ${PORT}`)
+});
 
 
 
