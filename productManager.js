@@ -53,8 +53,7 @@ class ProductManager {
     let data = this.readFile();
     let productToGet = data.find((product) => product.id === id);
     if (productToGet) {
-      let productFinale = data.find((product) => product.id === id);
-      return productFinale;
+      return productToGet;
     }
     console.log("Product doesn't found");
   }

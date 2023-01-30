@@ -21,6 +21,10 @@ routerProducts.put("/:pid", (req, res) => {
   // console.log(pm.getProducts());
   res.send(pm.getProducts())
 });
+routerProducts.delete("/:pid",(req,res)=>{
+  pm.deleteProduct(req.params.pid)
+  res.send(pm.getProducts())
+})
 
 routerProducts.post("/", (req, res) => {
   new Promise((resolve, reject) => {
